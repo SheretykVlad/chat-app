@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 
-export default function registerNewUser(user, setProcessEnd) {
+export default async function registerNewUser(user, setProcessEnd) {
     const db = firebase.firestore();
     firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
     .then(registredUser => {
@@ -9,18 +9,21 @@ export default function registerNewUser(user, setProcessEnd) {
             displayName: `${user.firstName} ${user.secondName}`
         })
         .then(() => {
-            db.collection('users').add({
+            db.collection('users')
+            .doc(registredUser.user.uid)
+            .set({
                 firstName: user.firstName,
                 secondName: user.secondName,
                 uid: registredUser.user.uid,
-                createdAt: new Date()
+                createdAt: new Date(),
+                isOnline: true
             })
             .then(() => {
                 const loggedInUser = {
                     firstName: user.firstName,
                     secondName: user.secondName,
                     uid: registredUser.user.uid,
-                    email: user.email,
+                    isOnline: true
                 }
                 setProcessEnd(true)
                 localStorage.setItem('user', JSON.stringify(loggedInUser))

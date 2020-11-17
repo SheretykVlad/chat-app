@@ -1,0 +1,4 @@
+export const chatConstants = {
+    GET_USERS_SUCCESS: 'GET_USERS_SUCCESS',
+    GET_MESSAGES_SUCCESS: 'GET_MESSAGES_SUCCESS'
+}
